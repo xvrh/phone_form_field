@@ -19,28 +19,36 @@ class CountryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      minWidth: 50,
-      onPressed: enabled ? onPressed : null,
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (showFlag) ...[
-            CircleFlag(
-              country.isoCode,
-              size: 20,
-            ),
-            SizedBox(
-              width: 8,
-            ),
-          ],
-          Text(
-            country.getDialCodeForDisplay(),
-            style: textStyle,
-          ),
-        ],
+    return SizedOverflowBox(
+      size: Size(14, 14),
+      child: CircleFlag(
+        country.isoCode,
+        size: 25,
       ),
     );
+    // return MaterialButton(
+    //   minWidth: 50,
+    //   onPressed: enabled ? onPressed : null,
+    //   padding: const EdgeInsets.all(0),
+    //   // padding: const EdgeInsets.all(20),
+    //   child: Row(
+    //     mainAxisSize: MainAxisSize.min,
+    //     children: [
+    //       if (showFlag) ...[
+    //         CircleFlag(
+    //           country.isoCode,
+    //           size: 20,
+    //         ),
+    //         // SizedBox(
+    //         //   width: 8,
+    //         // ),
+    //       ],
+    //       // Text(
+    //       //   country.getDialCodeForDisplay(),
+    //       //   style: textStyle,
+    //       // ),
+    //     ],
+    //   ),
+    // );
   }
 }
