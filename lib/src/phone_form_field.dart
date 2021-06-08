@@ -181,10 +181,11 @@ class _PhoneFormFieldState extends FormFieldState<PhoneNumber> {
   }
 
   Widget _textField() {
-    return TextField(
+    return TextFormField(
       focusNode: _focusNode,
       controller: _controller,
-      onSubmitted: (p) => widget.onSaved!(value),
+      onSaved: (p) => widget.onSaved!(value),
+      // onChanged: _on,
       style: widget.inputTextStyle,
       autofocus: widget.autofocus,
       autofillHints: widget.enabled && widget.withHint

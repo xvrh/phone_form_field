@@ -8,6 +8,22 @@ void main() {
   runApp(MyApp());
 }
 
+class Page1 extends StatelessWidget {
+  const Page1({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('page 1'),
+      ),
+      body: TextFormField(
+        autofocus: true,
+      ),
+    );
+  }
+}
+
 /// putting the widget at the top so it's easily findable in pub.dev example
 
 Widget getPhoneField({
@@ -173,7 +189,11 @@ class _PhoneFormFieldScreenState extends State<PhoneFormFieldScreen> {
                         height: 40,
                       ),
                       ElevatedButton(
-                        onPressed: _getSubmitState(),
+                        onPressed: () {
+                          // _getSubmitState();
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (ctx) => Page1()));
+                        },
                         child: Text('next'),
                       ),
                       SizedBox(
