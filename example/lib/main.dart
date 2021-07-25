@@ -73,19 +73,12 @@ class PhoneFormFieldScreen extends StatefulWidget {
 }
 
 class _PhoneFormFieldScreenState extends State<PhoneFormFieldScreen> {
-  PhoneParser parser = PhoneParser();
-  late PhoneNumber phoneNumber;
+  PhoneNumber phoneNumber = PhoneParser().parseWithIsoCode('US', '');
   bool outlineBorder = true;
   bool withLabel = true;
   bool autovalidate = true;
   bool mobileOnly = false;
   SelectorConfig selectorConfig = SelectorConfigCoverSheet();
-
-  @override
-  initState() {
-    phoneNumber = parser.parseWithIsoCode('US', '');
-    super.initState();
-  }
 
   _getSubmitState() {
     if (mobileOnly)
