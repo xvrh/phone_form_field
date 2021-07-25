@@ -1,6 +1,7 @@
 import 'package:circle_flags/circle_flags.dart';
 import 'package:flutter/material.dart';
-import 'package:phone_numbers_parser/phone_numbers_parser.dart';
+
+import 'countries.dart';
 
 class FlagDialCodeChip extends StatelessWidget {
   final Country country;
@@ -36,7 +37,7 @@ class FlagDialCodeChip extends StatelessWidget {
         ],
         if (showDialCode)
           Text(
-            country.getDialCodeForDisplay(),
+            country.displayDialCode,
             style: textStyle,
           ),
       ],

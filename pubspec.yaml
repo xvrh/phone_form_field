@@ -11,9 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   circle_flags: ^0.0.2
-  phone_numbers_parser: ^0.1.3
-  font_awesome_flutter: ^9.0.0
-  
+  phone_numbers_parser: ^1.0.1
+  dart_countries: ^2.1.0  
 
 dev_dependencies:
   flutter_test:

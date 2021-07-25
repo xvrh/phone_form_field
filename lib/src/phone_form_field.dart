@@ -6,6 +6,7 @@ import 'package:phone_form_field/src/country_selector.dart';
 import 'package:phone_form_field/src/selector_config.dart';
 import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
+import 'countries.dart';
 import 'flag_dial_code_chip.dart';
 
 /// Form Field for phone input
@@ -19,6 +20,7 @@ import 'flag_dial_code_chip.dart';
 ///
 /// The rest of the parameters should be self explanatory or common to regular TextFormField.
 class PhoneFormField extends FormField<PhoneNumber> {
+  final LightPhoneParser parser;
   final bool autofocus;
   final bool showFlagInInput;
 
@@ -49,6 +51,7 @@ class PhoneFormField extends FormField<PhoneNumber> {
     bool enabled = true,
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     // our params
+    bool lightParser = true,
     this.onChanged,
     this.autofocus = false,
     this.showFlagInInput = true,
@@ -58,7 +61,8 @@ class PhoneFormField extends FormField<PhoneNumber> {
     this.withHint = true,
     this.selectorConfig = const SelectorConfigCoverSheet(),
     PhoneNumberType? phoneNumberType,
-  }) : super(
+  })  : parser = lightParser ? LightPhoneParser() : PhoneParser(),
+        super(
           key: key,
           initialValue: initialValue,
           onSaved: (p) => onSaved != null ? onSaved(p!) : (p) {},
@@ -81,7 +85,7 @@ class _PhoneFormFieldState extends FormFieldState<PhoneNumber> {
 
   _PhoneFormFieldState();
 
-  get country => value?.country ?? Country.fromIsoCode('us');
+  String get isoCode => value?.isoCode ?? 'US';
 
   get isOutlineBorder => widget.decoration.border is OutlineInputBorder;
 
@@ -111,8 +115,8 @@ class _PhoneFormFieldState extends FormFieldState<PhoneNumber> {
   }
 
   _onNationalNumberChanges() {
-    final newPhoneNumber = PhoneNumber.fromIsoCode(
-      country.isoCode,
+    final newPhoneNumber = widget.parser.parseWithIsoCode(
+      isoCode,
       _controller.text,
     );
     didChange(newPhoneNumber);
@@ -121,11 +125,12 @@ class _PhoneFormFieldState extends FormFieldState<PhoneNumber> {
   _onCountrySelected(Country country) {
     PhoneNumber newPhoneNumber;
     if (value != null) {
-      newPhoneNumber = value!.copyWithIsoCode(
+      newPhoneNumber = widget.parser.copyWithIsoCode(
+        value!,
         country.isoCode,
       );
     } else {
-      newPhoneNumber = PhoneNumber.fromIsoCode(country.isoCode, '');
+      newPhoneNumber = widget.parser.parseWithIsoCode(country.isoCode, '');
     }
     didChange(newPhoneNumber);
   }
@@ -146,7 +151,7 @@ class _PhoneFormFieldState extends FormFieldState<PhoneNumber> {
     } else if (widget.selectorConfig is SelectorConfigCoverSheet) {
       // bottom sheets keeps the focus on the current focussed input
       // so we gotta handle that part
-      _focusNode.unfocus();
+      // _focusNode.unfocus();
       final ctrl = showBottomSheet(
         context: context,
         builder: (_) => selector,
@@ -181,10 +186,10 @@ class _PhoneFormFieldState extends FormFieldState<PhoneNumber> {
   }
 
   Widget _textField() {
-    return TextField(
+    return TextFormField(
       focusNode: _focusNode,
       controller: _controller,
-      onSubmitted: (p) => widget.onSaved!(value),
+      onSaved: (p) => widget.onSaved!(value),
       style: widget.inputTextStyle,
       autofocus: widget.autofocus,
       autofillHints: widget.enabled && widget.withHint
@@ -218,17 +223,17 @@ class _PhoneFormFieldState extends FormFieldState<PhoneNumber> {
           padding: isOutlineBorder
               ? const EdgeInsets.fromLTRB(12, 16, 0, 16)
               : const EdgeInsets.fromLTRB(0, 16, 0, 16),
-          child: _getDialCode(),
+          child: _getDialCodeButton(),
         ),
       ),
     );
   }
 
-  Widget _getDialCode() {
+  Widget _getDialCodeButton() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: FlagDialCodeChip(
-        country: country,
+        country: Country(isoCode),
         showFlag: widget.showFlagInInput,
         textStyle: TextStyle(fontSize: 16),
         flagSize: 20,
@@ -239,7 +244,7 @@ class _PhoneFormFieldState extends FormFieldState<PhoneNumber> {
   InputDecoration _getEffectiveDecoration() {
     return widget.decoration.copyWith(
       errorText: getErrorText(),
-      prefix: _getDialCode(),
+      prefix: _getDialCodeButton(),
     );
   }
 

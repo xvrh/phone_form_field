@@ -21,6 +21,7 @@ Widget getPhoneField({
   required Function(PhoneNumber?) onSaved,
 }) {
   return PhoneFormField(
+    lightParser: false,
     initialValue: initialValue,
     autofocus: true,
     selectorConfig: selectorConfig,
@@ -72,12 +73,19 @@ class PhoneFormFieldScreen extends StatefulWidget {
 }
 
 class _PhoneFormFieldScreenState extends State<PhoneFormFieldScreen> {
-  PhoneNumber phoneNumber = PhoneNumber.fromIsoCode('FR', '');
+  PhoneParser parser = PhoneParser();
+  late PhoneNumber phoneNumber;
   bool outlineBorder = true;
   bool withLabel = true;
   bool autovalidate = true;
   bool mobileOnly = false;
   SelectorConfig selectorConfig = SelectorConfigCoverSheet();
+
+  @override
+  initState() {
+    phoneNumber = parser.parseWithIsoCode('US', '');
+    super.initState();
+  }
 
   _getSubmitState() {
     if (mobileOnly)
@@ -99,93 +107,91 @@ class _PhoneFormFieldScreenState extends State<PhoneFormFieldScreen> {
             child: Card(
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: AutofillGroup(
-                  child: Column(
-                    children: [
-                      SwitchEl(
-                        value: outlineBorder,
-                        onChanged: (v) => setState(() => outlineBorder = v),
-                        title: 'Outlined border',
+                child: Column(
+                  children: [
+                    SwitchEl(
+                      value: outlineBorder,
+                      onChanged: (v) => setState(() => outlineBorder = v),
+                      title: 'Outlined border',
+                    ),
+                    SwitchEl(
+                      value: autovalidate,
+                      onChanged: (v) => setState(() => autovalidate = v),
+                      title: 'Autovalidate',
+                    ),
+                    SwitchEl(
+                      value: withLabel,
+                      onChanged: (v) => setState(() => withLabel = v),
+                      title: 'Label',
+                    ),
+                    SwitchEl(
+                      value: mobileOnly,
+                      onChanged: (v) => setState(() => mobileOnly = v),
+                      title: 'Mobile phone number only',
+                    ),
+                    Text('country selector: '),
+                    SingleChildScrollView(
+                      child: Row(
+                        children: [
+                          Radio(
+                            value: SelectorConfigCoverSheet(),
+                            groupValue: selectorConfig,
+                            onChanged: (SelectorConfig? value) {
+                              setState(() => selectorConfig =
+                                  value ?? SelectorConfigCoverSheet());
+                            },
+                          ),
+                          Text('cover sheet'),
+                          Radio(
+                            value: SelectorConfigBottomSheet(null),
+                            groupValue: selectorConfig,
+                            onChanged: (SelectorConfig? value) {
+                              setState(() => selectorConfig =
+                                  value ?? SelectorConfigCoverSheet());
+                            },
+                          ),
+                          Text('bottom sheet'),
+                          Radio(
+                            value: SelectorConfigDialog(),
+                            groupValue: selectorConfig,
+                            onChanged: (SelectorConfig? value) {
+                              setState(() => selectorConfig =
+                                  value ?? SelectorConfigCoverSheet());
+                            },
+                          ),
+                          Text('dialog'),
+                        ],
                       ),
-                      SwitchEl(
-                        value: autovalidate,
-                        onChanged: (v) => setState(() => autovalidate = v),
-                        title: 'Autovalidate',
-                      ),
-                      SwitchEl(
-                        value: withLabel,
-                        onChanged: (v) => setState(() => withLabel = v),
-                        title: 'Label',
-                      ),
-                      SwitchEl(
-                        value: mobileOnly,
-                        onChanged: (v) => setState(() => mobileOnly = v),
-                        title: 'Mobile phone number only',
-                      ),
-                      Text('country selector: '),
-                      SingleChildScrollView(
-                        child: Row(
-                          children: [
-                            Radio(
-                              value: SelectorConfigCoverSheet(),
-                              groupValue: selectorConfig,
-                              onChanged: (SelectorConfig? value) {
-                                setState(() => selectorConfig =
-                                    value ?? SelectorConfigCoverSheet());
-                              },
-                            ),
-                            Text('cover sheet'),
-                            Radio(
-                              value: SelectorConfigBottomSheet(null),
-                              groupValue: selectorConfig,
-                              onChanged: (SelectorConfig? value) {
-                                setState(() => selectorConfig =
-                                    value ?? SelectorConfigCoverSheet());
-                              },
-                            ),
-                            Text('bottom sheet'),
-                            Radio(
-                              value: SelectorConfigDialog(),
-                              groupValue: selectorConfig,
-                              onChanged: (SelectorConfig? value) {
-                                setState(() => selectorConfig =
-                                    value ?? SelectorConfigCoverSheet());
-                              },
-                            ),
-                            Text('dialog'),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      getPhoneField(
-                        initialValue: phoneNumber,
-                        selectorConfig: selectorConfig,
-                        withLabel: withLabel,
-                        outlineBorder: outlineBorder,
-                        mobileOnly: mobileOnly,
-                        autovalidate: autovalidate,
-                        onChanged: (p) => setState(() => phoneNumber = p!),
-                        onSaved: (p) => setState(() => phoneNumber = p!),
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      ElevatedButton(
-                        onPressed: _getSubmitState(),
-                        child: Text('next'),
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      Text(phoneNumber.toString()),
-                      Text(
-                          'is valid mobile number ${phoneNumber.validate(PhoneNumberType.mobile)}'),
-                      Text(
-                          'is valid fixed line number ${phoneNumber.validate(PhoneNumberType.fixedLine)}'),
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    getPhoneField(
+                      initialValue: phoneNumber,
+                      selectorConfig: selectorConfig,
+                      withLabel: withLabel,
+                      outlineBorder: outlineBorder,
+                      mobileOnly: mobileOnly,
+                      autovalidate: autovalidate,
+                      onChanged: (p) => setState(() => phoneNumber = p!),
+                      onSaved: (p) => setState(() => phoneNumber = p!),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    ElevatedButton(
+                      onPressed: _getSubmitState(),
+                      child: Text('next'),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Text(phoneNumber.toString()),
+                    Text(
+                        'is valid mobile number ${phoneNumber.validate(PhoneNumberType.mobile)}'),
+                    Text(
+                        'is valid fixed line number ${phoneNumber.validate(PhoneNumberType.fixedLine)}'),
+                  ],
                 ),
               ),
             ),
@@ -232,7 +238,7 @@ class _DialCodeChipScreenState extends State<DialCodeChipScreen> {
                 width: 20,
               ),
               FlagDialCodeChip(
-                country: Country.fromIsoCode('us'),
+                country: Country('US'),
                 showDialCode: showDialCode,
                 showFlag: showFlag,
               ),
@@ -240,7 +246,7 @@ class _DialCodeChipScreenState extends State<DialCodeChipScreen> {
                 width: 20,
               ),
               FlagDialCodeChip(
-                country: Country.fromIsoCode('fr'),
+                country: Country('FR'),
                 showDialCode: showDialCode,
                 showFlag: showFlag,
               ),
@@ -248,7 +254,7 @@ class _DialCodeChipScreenState extends State<DialCodeChipScreen> {
                 width: 20,
               ),
               FlagDialCodeChip(
-                country: Country.fromIsoCode('br'),
+                country: Country('BR'),
                 showDialCode: showDialCode,
                 showFlag: showFlag,
               ),
@@ -256,7 +262,7 @@ class _DialCodeChipScreenState extends State<DialCodeChipScreen> {
                 width: 20,
               ),
               FlagDialCodeChip(
-                country: Country.fromIsoCode('es'),
+                country: Country('ES'),
                 showDialCode: showDialCode,
                 showFlag: showFlag,
               ),

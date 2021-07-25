@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phone_form_field/src/search_box.dart';
-import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
+import 'countries.dart';
 import 'country_list.dart';
 
 class CountrySelector extends StatefulWidget {
@@ -35,8 +35,8 @@ class _CountrySelectorState extends State<CountrySelector> {
 
   List<Country> _filterByDialCode(String dialCode) {
     final getSortPoint =
-        (Country c) => c.dialCode.length == dialCode.length ? 1 : 0;
-    return countries.where((c) => c.dialCode.contains(dialCode)).toList()
+        (Country c) => c.isoCode.length == dialCode.length ? 1 : 0;
+    return countries.where((c) => c.isoCode.contains(dialCode)).toList()
       // puts the closest match at the top
       ..sort((a, b) => getSortPoint(b) - getSortPoint(a));
   }

@@ -1,7 +1,8 @@
 import 'package:circle_flags/circle_flags.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
+import 'countries.dart';
 import 'localization/phone_field_localization.dart';
 
 class CountryList extends StatelessWidget {
@@ -21,7 +22,7 @@ class CountryList extends StatelessWidget {
       shrinkWrap: true,
       itemCount: countries.length,
       itemBuilder: (BuildContext context, int index) {
-        Country country = countries[index];
+        final country = countries[index];
         return ListTile(
           key: Key(country.isoCode),
           leading: CircleFlag(country.isoCode),
@@ -36,7 +37,7 @@ class CountryList extends StatelessWidget {
           subtitle: Align(
             alignment: AlignmentDirectional.centerStart,
             child: Text(
-              country.getDialCodeForDisplay(),
+              country.displayDialCode,
               textDirection: TextDirection.ltr,
               textAlign: TextAlign.start,
             ),

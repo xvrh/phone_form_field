@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchBox extends StatelessWidget {
   final Function(String) onChanged;
@@ -16,7 +15,7 @@ class SearchBox extends StatelessWidget {
         onChanged: onChanged,
         decoration: InputDecoration(
           prefixIcon: Icon(
-            FontAwesomeIcons.search,
+            Icons.search,
             color: Theme.of(context).brightness == Brightness.dark
                 ? Colors.white54
                 : Colors.black38,
