@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:phone_form_field/l10n/generated/phone_field_localization.dart';
 import 'package:phone_form_field/l10n/generated/phone_field_localization_en.dart';
 import 'package:phone_form_field/src/widgets/country_selector/localized_country_registry.dart';
-import 'package:phone_numbers_parser/phone_numbers_parser.dart';
+import '../../phone_numbers_parser/phone_numbers_parser.dart';
 
 import 'country_finder.dart';
 import 'country.dart';

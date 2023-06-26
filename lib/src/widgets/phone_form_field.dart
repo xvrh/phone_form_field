@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 
-import 'package:circle_flags/circle_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:phone_numbers_parser/phone_numbers_parser.dart';
+import '../phone_numbers_parser/phone_numbers_parser.dart';
 
 import '../constants/patterns.dart';
 import '../validation/validator_translator.dart';

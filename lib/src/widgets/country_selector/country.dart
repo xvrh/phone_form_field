@@ -1,5 +1,5 @@
-import 'package:phone_numbers_parser/metadata.dart';
-import 'package:phone_numbers_parser/phone_numbers_parser.dart';
+import '../../phone_numbers_parser/metadata.dart';
+import '../../phone_numbers_parser/phone_numbers_parser.dart';
 
 /// Country regroup informations for displaying a list of countries
 class Country {

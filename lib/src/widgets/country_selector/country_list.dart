@@ -1,4 +1,4 @@
-import 'package:circle_flags/circle_flags.dart';
+import '../../circle_flags.dart';
 import 'package:flutter/material.dart';
 
 import '../../../l10n/generated/phone_field_localization.dart';

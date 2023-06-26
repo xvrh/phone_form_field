@@ -1,6 +1,6 @@
-import 'package:circle_flags/circle_flags.dart';
+import '../circle_flags.dart';
 import 'package:flutter/material.dart';
-import 'package:phone_numbers_parser/phone_numbers_parser.dart';
+import '../phone_numbers_parser/phone_numbers_parser.dart';
 
 import 'country_selector/country.dart';
 
